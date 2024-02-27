@@ -14,4 +14,4 @@ class PlantSerializer(serializers.ModelSerializer):
 class DataSerializer(serializers.ModelSerializer):
     class Meta:
         model = Data
-        fields = ('endpoint', 'plant', 'temparature', 'humidity' ,'ph', 'moisture')
+        fields = ('endpoint', 'plant', 'temparature', 'humidity' ,'ph', 'moisture', 'time')

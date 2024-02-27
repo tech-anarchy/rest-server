@@ -26,3 +26,4 @@ class Data(models.Model):
     humidity = models.FloatField(null=True, blank=True, default=None)
     ph = models.FloatField(null=True, blank=True, default=None)
     moisture = models.FloatField(null=True, blank=True, default=None)
+    time = models.TimeField(auto_now=True)
