@@ -5,7 +5,7 @@ from rest_framework.decorators import api_view, permission_classes
 
 import re
 
-from .models import EndPoint
+from .models import EndPoint, Data
 from .serializer import EndPointSerializer, DataSerializer
 
 UUID_PATTERN = re.compile(r'^[\da-f]{8}-([\da-f]{4}-){3}[\da-f]{12}$', re.IGNORECASE)
@@ -13,9 +13,12 @@ UUID_PATTERN = re.compile(r'^[\da-f]{8}-([\da-f]{4}-){3}[\da-f]{12}$', re.IGNORE
 # Create your views here.
 @api_view(['GET'])
 def getData(request):
-    endpoints = EndPoint.objects.all()
-    endpoints_serializer = EndPointSerializer(endpoints, many = True)
-    return Response(endpoints_serializer.data)
+    # endpoints = EndPoint.objects.all()
+    # endpoints_serializer = EndPointSerializer(endpoints, many = True)
+    # return Response(endpoints_serializer.data)
+    data = Data.objects.all()
+    data_serializer = DataSerializer(data, many = True)
+    return Response(data_serializer.data)
 
 @api_view(['GET'])
 @permission_classes((IsAuthenticated, ))
