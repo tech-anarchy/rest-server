@@ -5,8 +5,8 @@ from rest_framework.decorators import api_view, permission_classes
 
 import re
 
-from .models import EndPoint, Data
-from .serializer import EndPointSerializer, DataSerializer
+from .models import EndPoint, PlantAutoData
+from .serializer import EndPointSerializer, PlantAutoDataSerializer
 
 UUID_PATTERN = re.compile(r'^[\da-f]{8}-([\da-f]{4}-){3}[\da-f]{12}$', re.IGNORECASE)
 
@@ -16,8 +16,8 @@ def getData(request):
     # endpoints = EndPoint.objects.all()
     # endpoints_serializer = EndPointSerializer(endpoints, many = True)
     # return Response(endpoints_serializer.data)
-    data = Data.objects.all()
-    data_serializer = DataSerializer(data, many = True)
+    data = PlantAutoData.objects.all()
+    data_serializer = PlantAutoDataSerializer(data, many = True)
     return Response(data_serializer.data)
 
 @api_view(['GET'])
@@ -42,7 +42,7 @@ def checkConnection(request):
 @api_view(['POST'])
 @permission_classes((IsAuthenticated, ))
 def postData(request):
-    serializer = DataSerializer(data=request.data)
+    serializer = PlantAutoDataSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
         response = "SAVED"

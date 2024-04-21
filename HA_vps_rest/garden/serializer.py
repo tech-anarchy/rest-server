@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import EndPoint, Plant, Data
+from .models import EndPoint, Plant, PlantAutoData
 
 class EndPointSerializer(serializers.ModelSerializer):
     class Meta:
@@ -11,7 +11,7 @@ class PlantSerializer(serializers.ModelSerializer):
         model = EndPoint
         fields = ('uuid', 'name', 'location' ,'description')
 
-class DataSerializer(serializers.ModelSerializer):
+class PlantAutoDataSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Data
+        model = PlantAutoData
         fields = ('endpoint', 'plant', 'temparature', 'humidity' ,'ph', 'moisture', 'time')
