@@ -4,20 +4,20 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 
 import re
+import json
+import uuid
 
-from .models import EndPoint, PlantAutoData
-from .serializer import EndPointSerializer, PlantAutoDataSerializer
+from django.contrib.auth.models import User
+from .models import EndPoint, PlantAutoData, Plant
+from .serializer import EndPointSerializer, PlantAutoDataSerializer, PlantSerializer, PlantUsrDataSerializer
 
 UUID_PATTERN = re.compile(r'^[\da-f]{8}-([\da-f]{4}-){3}[\da-f]{12}$', re.IGNORECASE)
 
 # Create your views here.
 @api_view(['GET'])
 def getData(request):
-    # endpoints = EndPoint.objects.all()
-    # endpoints_serializer = EndPointSerializer(endpoints, many = True)
-    # return Response(endpoints_serializer.data)
-    data = PlantAutoData.objects.all()
-    data_serializer = PlantAutoDataSerializer(data, many = True)
+    data = Plant.objects.all()
+    data_serializer = PlantSerializer(data, many = True)
     return Response(data_serializer.data)
 
 @api_view(['GET'])
@@ -49,3 +49,97 @@ def postData(request):
     else:
         response = "INVALID DATA"
     return Response(response)
+
+
+@api_view(['POST'])
+def postFertilizer(request):
+    
+    msg = []
+    try:
+        username = request.data['user']
+        user = User.objects.get(username = username)
+    except:
+        msg.append("Invalid User")
+
+    plants = []
+    try:
+        # plants = filter(None, request.data['plants'].split(","))
+        plants = request.data['plants']
+    except:
+        msg.append("No Plants provided")
+
+    try:
+        fertilizer = request.data['fertilizer']
+        if fertilizer is None or fertilizer == "":
+            msg.append("Invalid Fertilizer")
+    except:
+        msg.append("No Fertilizer provided")
+
+    if plants:
+        for plant_id in plants:
+            save = False
+            if bool(UUID_PATTERN.match(plant_id)):
+                try:
+                    plant = Plant.objects.get(uuid = plant_id)
+                    save = True
+                except:
+                    msg.append("Invalid Plant : " + str(plant_id))
+            else:
+                msg.append("Invalid Plant ID : " + str(plant_id))
+
+
+            if save and msg == []:
+                data = {
+                    "user": user.pk,
+                    "plant": plant_id,
+                    "fertilizer": fertilizer
+                }
+                serializer = PlantUsrDataSerializer(data = data)
+                if serializer.is_valid():
+                    serializer.save()
+                    msg.append("Saved : " + str(plant.name))
+                else:
+                    msg.append("Invalid Data : " + str(plant.name))
+
+    return Response(msg)
+
+@api_view(['POST'])
+def addPlant(request):
+    msg = []
+    try:
+        plant = request.data['plant']
+        if plant is None or plant == "":
+            msg.append("Invalid Plant")
+    except:
+        msg.append("No Fertilizer provided")
+
+    try:
+        location = request.data['location']
+        if location is None or location == "":
+            msg.append("Invalid Location")
+    except:
+        msg.append("No Location provided")
+
+    try:
+        description = request.data['description']
+        if description is None or description == "":
+            description = json.dumps('NA')
+    except:
+        msg.append("No Description provided")
+
+    if msg == []:
+
+        data = {
+            'uuid' : uuid.uuid4(),
+            'name' : plant,
+            'location' : location,
+            'description' : description
+        }
+        serializer = PlantSerializer(data = data)
+        if serializer.is_valid():
+            serializer.save()
+            msg.append("Saved")
+        else :
+            msg.append("Invalid Data")
+
+    return Response(msg)

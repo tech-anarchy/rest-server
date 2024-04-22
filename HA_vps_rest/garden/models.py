@@ -33,8 +33,10 @@ class PlantUsrData(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     plant = models.ForeignKey(Plant, to_field="uuid", db_column="plant", on_delete=models.CASCADE)
 
-    fertilizer = models.CharField(max_length = 140)
-    notes = models.TextField()
+    fertilizer = models.CharField(max_length = 140, null=True, blank=True, default=None)
+    notes = models.TextField(null=True, blank=True, default=None)
+
+    time = models.TimeField(auto_now=True)
 
     def __str__(self):
-        return self.user.first_name + ":" + self.plant.name
+        return self.user.username + " : " +  self.plant.name

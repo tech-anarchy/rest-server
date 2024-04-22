@@ -8,15 +8,15 @@
           </a>
         </div>
         <div class="menu-center flex space-x-12">
-          <a href="#">
+          <RouterLink to="/">
             <HomeModernIcon class="h-6 w-6 text-gray-400" />
-          </a>
-          <a href="#">
+          </RouterLink>
+          <RouterLink to="/garden">
             <ArchiveBoxXMarkIcon class="h-6 w-6 text-emerald-500" />
-          </a>
-          <a href="#">
+          </RouterLink>
+          <RouterLink to="/aqua">
             <BeakerIcon class="h-6 w-6 text-blue-500" />
-          </a>
+          </RouterLink>
 
         </div>
         <div class="menu-right">
@@ -27,7 +27,11 @@
       </div>
     </div>
   </nav>
-  <RouterView />
+
+  <main class="py-6 px-8 bg-gray-100">
+    <RouterView />
+  </main>
+  
 </template>
 
 <script setup>

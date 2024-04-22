@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="py-10 px-8 border-b border-gray-200">
       <h1>Garden View</h1>
       <div v-if="loading">Loading...</div>
       <div v-else>

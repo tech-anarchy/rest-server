@@ -1,7 +1,13 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
-import SignupView from '@/views/SignupView.vue'
-import GardenView from '@/views/GardenView.vue'
+
+import GardenView from '@/views/garden/GardenView.vue'
+import AddPlantView from '@/views/garden/AddPlantView.vue'
+import UpdateFertilizerView from '@/views/garden/UpdateFertilizerView.vue'
+import PlantView from '@/views/garden/PlantView.vue'
+
+import AquariumView from '@/views/aqua/AquariumView.vue'
+
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -20,14 +26,29 @@ const router = createRouter({
       component: () => import('../views/AboutView.vue')
     },
     {
-      path: '/signup',
-      name: 'signup',
-      component: SignupView
-    },
-    {
       path: '/garden',
       name: 'garden',
       component: GardenView
+    },
+    {
+      path: '/garden//plant/:id',
+      name: 'plant',
+      component: PlantView
+    },
+    {
+      path: '/garden/addplant',
+      name: 'addplant',
+      component: AddPlantView
+    },
+    {
+      path: '/garden/addfertilizer',
+      name: 'addfertilizer',
+      component: UpdateFertilizerView
+    },
+    {
+      path: '/aqua',
+      name: 'aqua',
+      component: AquariumView
     }
   ]
 })
