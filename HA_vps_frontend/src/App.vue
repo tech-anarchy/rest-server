@@ -9,13 +9,13 @@
         </div>
         <div class="menu-center flex space-x-12">
           <RouterLink to="/">
-            <HomeModernIcon class="h-6 w-6 text-gray-400" />
+            <p style="font-size:50px">&#127969;</p>
           </RouterLink>
           <RouterLink to="/garden">
-            <ArchiveBoxXMarkIcon class="h-6 w-6 text-emerald-500" />
+            <p style="font-size:50px">&#129716;</p>
           </RouterLink>
-          <RouterLink to="/aqua">
-            <BeakerIcon class="h-6 w-6 text-blue-500" />
+          <RouterLink to="/aqua"> 
+            <p style="font-size:50px">&#129720;</p>
           </RouterLink>
 
         </div>
@@ -35,6 +35,5 @@
 </template>
 
 <script setup>
-import { BeakerIcon, HomeModernIcon } from '@heroicons/vue/24/solid'
-import { ArchiveBoxXMarkIcon } from '@heroicons/vue/24/outline'
+import { HomeModernIcon } from '@heroicons/vue/24/solid'
 </script>

@@ -19,4 +19,4 @@ class PlantAutoDataSerializer(serializers.ModelSerializer):
 class PlantUsrDataSerializer(serializers.ModelSerializer):
     class Meta:
         model = PlantUsrData
-        fields = ('user', 'plant', 'fertilizer', 'notes', 'time')
+        fields = ('user', 'plant', 'fertilizer', 'notes', 'date')

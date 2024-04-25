@@ -36,7 +36,7 @@ class PlantUsrData(models.Model):
     fertilizer = models.CharField(max_length = 140, null=True, blank=True, default=None)
     notes = models.TextField(null=True, blank=True, default=None)
 
-    time = models.TimeField(auto_now=True)
+    date = models.DateField()
 
     def __str__(self):
         return self.user.username + " : " +  self.plant.name

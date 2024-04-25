@@ -6,6 +6,7 @@ from rest_framework.decorators import api_view, permission_classes
 import re
 import json
 import uuid
+from datetime import datetime
 
 from django.contrib.auth.models import User
 from .models import EndPoint, PlantAutoData, Plant
@@ -75,6 +76,12 @@ def postFertilizer(request):
     except:
         msg.append("No Fertilizer provided")
 
+    try:
+        rawDate = request.data['date']
+        date = datetime.strptime(rawDate[0], "%d-%b-%Y").date()
+    except:
+        msg.append("No Date provided")
+
     if plants:
         for plant_id in plants:
             save = False
@@ -92,7 +99,8 @@ def postFertilizer(request):
                 data = {
                     "user": user.pk,
                     "plant": plant_id,
-                    "fertilizer": fertilizer
+                    "fertilizer": fertilizer,
+                    "date": date,
                 }
                 serializer = PlantUsrDataSerializer(data = data)
                 if serializer.is_valid():

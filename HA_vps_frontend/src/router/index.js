@@ -2,11 +2,13 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 
 import GardenView from '@/views/garden/GardenView.vue'
-import AddPlantView from '@/views/garden/AddPlantView.vue'
-import UpdateFertilizerView from '@/views/garden/UpdateFertilizerView.vue'
 import PlantView from '@/views/garden/PlantView.vue'
 
 import AquariumView from '@/views/aqua/AquariumView.vue'
+
+import Temp1View from '@/views/temp/Temp1View.vue'
+import Temp2View from '@/views/temp/Temp2View.vue'
+import Temp3View from '@/views/temp/Temp3View.vue'
 
 
 const router = createRouter({
@@ -31,24 +33,29 @@ const router = createRouter({
       component: GardenView
     },
     {
-      path: '/garden//plant/:id',
+      path: '/garden/plant/:id',
       name: 'plant',
       component: PlantView
-    },
-    {
-      path: '/garden/addplant',
-      name: 'addplant',
-      component: AddPlantView
-    },
-    {
-      path: '/garden/addfertilizer',
-      name: 'addfertilizer',
-      component: UpdateFertilizerView
     },
     {
       path: '/aqua',
       name: 'aqua',
       component: AquariumView
+    },
+    {
+      path: '/temp/1',
+      name: 'temp1',
+      component: Temp1View
+    },
+    {
+      path: '/temp/2',
+      name: 'temp2',
+      component: Temp2View
+    },
+    {
+      path: '/temp/3',
+      name: 'temp',
+      component: Temp3View
     }
   ]
 })
