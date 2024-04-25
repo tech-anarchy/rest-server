@@ -9,7 +9,7 @@ import uuid
 from datetime import datetime
 
 from django.contrib.auth.models import User
-from .models import EndPoint, PlantAutoData, Plant
+from .models import EndPoint, PlantAutoData, Plant, PlantUsrData
 from .serializer import EndPointSerializer, PlantAutoDataSerializer, PlantSerializer, PlantUsrDataSerializer
 
 UUID_PATTERN = re.compile(r'^[\da-f]{8}-([\da-f]{4}-){3}[\da-f]{12}$', re.IGNORECASE)
@@ -20,6 +20,29 @@ def getData(request):
     data = Plant.objects.all()
     data_serializer = PlantSerializer(data, many = True)
     return Response(data_serializer.data)
+
+@api_view(['GET'])
+def getPlant(request, uuid):
+    if bool(UUID_PATTERN.match(uuid)):
+        try:
+            plant = Plant.objects.get(uuid = uuid)
+        except:
+            return Response('INVALID PLANT')
+    else:
+        return Response('INVALID QUERY')
+    
+    usr_data = PlantUsrData.objects.filter(plant = plant).order_by('-date')
+    # auto_data = PlantAutoData.objects.filter(plant = plant)
+
+    plant_serializer = PlantSerializer(plant)
+    usr_data_serializer  = PlantUsrDataSerializer(usr_data, many = True)
+
+    response = {
+        "plant" : plant_serializer.data,
+        "usr_data" : usr_data_serializer.data
+    }
+
+    return Response(response)
 
 @api_view(['GET'])
 @permission_classes((IsAuthenticated, ))
@@ -71,10 +94,16 @@ def postFertilizer(request):
 
     try:
         fertilizer = request.data['fertilizer']
-        if fertilizer is None or fertilizer == "":
-            msg.append("Invalid Fertilizer")
     except:
-        msg.append("No Fertilizer provided")
+        fertilizer = None
+
+    try:
+        comments = request.data['comments'] 
+    except:
+        comments = None
+
+    if (fertilizer is None or fertilizer == "") and (comments is None or comments == ""):
+        msg.append("Invalid Fertilizer/Notes")
 
     try:
         rawDate = request.data['date']
@@ -101,6 +130,7 @@ def postFertilizer(request):
                     "plant": plant_id,
                     "fertilizer": fertilizer,
                     "date": date,
+                    "notes": comments
                 }
                 serializer = PlantUsrDataSerializer(data = data)
                 if serializer.is_valid():

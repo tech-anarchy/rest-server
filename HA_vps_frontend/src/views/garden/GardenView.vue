@@ -120,7 +120,14 @@
                       </div>
 
                       <div class="py-5">
-                          <button class="py-4 px-6 bg-purple-600 text-white rounded-lg">Submit</button>
+
+                        <div v-if="!b_submitPlantForm">
+                            <label class="block mb-2 text-sm font-medium text-red-500 dark:text-white">
+                                Fix errors before submitting.
+                            </label>
+                        </div>
+
+                        <button class="py-4 px-6 bg-purple-600 text-white rounded-lg">Submit</button>
                       </div>
                   </div>
               </form>
@@ -154,14 +161,14 @@
                               <fwb-input
                                   v-model="fertilizer_form.fertilizer"
                                   placeholder="Fertilizer/Pesticide"
-                                  label="Fertilizer"
+                                  label="Fertilizer/Pesticide"
                               />
                           </div>
                           <div v-else>
                               <fwb-input
                                   v-model="fertilizer_form.fertilizer"
                                   placeholder="Fertilizer/Pesticide"
-                                  label="Fertilizer"
+                                  label="Fertilizer/Pesticide"
                                   validation-status="error"
                               />
                               <label class="block mb-2 text-sm font-medium text-red-500 dark:text-white">
@@ -229,6 +236,11 @@
                       </div>
 
                       <div class="py-5">
+                        <div v-if="!b_submitFertilizerForm">
+                            <label class="block mb-2 text-sm font-medium text-red-500 dark:text-white">
+                                Fix errors before submitting.
+                            </label>
+                        </div>
                           <button class="py-4 px-6 bg-purple-600 text-white rounded-lg">Submit</button>
                       </div>
 
@@ -244,7 +256,7 @@
               </div>
               <div>
                   <form action="" class="mx-5 space-y-6" v-on:submit.prevent="showFertilizerForm">
-                      <button class="py-4 px-6 bg-purple-600 text-white rounded-lg">Update Fertilizer</button>
+                      <button class="py-4 px-6 bg-purple-600 text-white rounded-lg">Update Fertilizer/Notes</button>
                   </form>
               </div>
               
@@ -267,7 +279,7 @@
                     <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
                     {{ plant.name }}
                     </h5>
-                    <fwb-badge> {{ getLocation(plant.location)}} </fwb-badge>
+                    <fwb-badge> {{ plant.location }} </fwb-badge>
                     <div class="my-3" v-for="temp in [parseDescription(plant.description)]">
 
                       <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2">
@@ -398,207 +410,202 @@
 </script>
 
 <script>
-  import axios from 'axios'
-import { months, locations } from '../../js/constants.js'
+    import axios from 'axios'
+    import { months, locations } from '../../js/constants.js'
 
-export default {
-data() {
-    return {
-        
-        loading: false,
-        error: null,
-        plants: [],
-
-        desc_notes: {},
-
-        b_plantName: true,
-        b_plantLocation: true,
-
-        b_submitPlantForm: true,
-
-        b_showPlantForm: false,
-
-        b_fertilizeruser: true,
-        b_fertilizerDate: true,
-        b_fertilizerPlants: true,
-        b_fertilizerData: true,
-
-        b_submitFertilizerForm: true,
-
-        b_showFertilizerForm: false,
-        
-        plant_notes: {
-            sow_months : ref([]),
-            planting_method: '',
-            date_planted : ref([]),
-            soil: '',
-            container : '',
-            ideal_spacing: '',
-            no_planted: '',
-            germination_time: '',
-            harvest_time: '',
-            comment: ''
-        },
-        plant_form : {
-            plant: '',
-            location: '',
-            description: ''
-        },
-
-
-        fertilizer_form : {
-            user : '',
-            fertilizer : '',
-            date: ref([]),
-            plants : [],
-            comments : ''
-        },
-    };
-},
-mounted() {
-    this.fetchPlants();
-},
-methods: {
-    fetchPlants() {
-    this.loading = true;
-    axios.get('/garden/')
-        .then(response => {
-        this.loading = false;
-        this.plants = response.data;
-        })
-        .catch(error => {
-        this.loading = false;
-        this.error = error.message;
-        });
-    },
-    getLocation(locationKey) {
-    const plantLocation = locations.find(location => location.value === locationKey);
-    return plantLocation.name
-    },
-    parseDescription(desc) {
-    const plantNotes = JSON.parse(desc)
-    return plantNotes
-    // this.desc_notes = plantNotes
-    },
-    submitPlant() {
-            this.b_submitPlantForm = true
-            this.b_plantLocation = true
-            this.b_plantName = true
-            this.errors = []
-            this.plant_form.description = JSON.stringify(this.plant_notes)
-            if (this.plant_form.plant === ''){
-                this.b_plantName = false
-                this.b_submitPlantForm = false
-            }
-            if (this.plant_form.location === ''){
-                this.b_plantLocation = false
-                this.b_submitPlantForm = false
-            }
-            if (this.b_submitPlantForm) {
-                console.log('info', this.plant_form)
-
-                axios
-                .post('/garden/plants/post/', this.plant_form)
-                .then( response => {
-                    console.log('info', response.data)
-                }
-                )
-
-                this.resetForm()
-            }
+    export default {
+    data() {
+        return {
             
+            loading: false,
+            error: null,
+            plants: [],
+
+            desc_notes: {},
+
+            b_plantName: true,
+            b_plantLocation: true,
+
+            b_submitPlantForm: true,
+
+            b_showPlantForm: false,
+
+            b_fertilizeruser: true,
+            b_fertilizerDate: true,
+            b_fertilizerPlants: true,
+            b_fertilizerData: true,
+
+            b_submitFertilizerForm: true,
+
+            b_showFertilizerForm: false,
+            
+            plant_notes: {
+                sow_months : ref([]),
+                planting_method: '',
+                date_planted : ref([]),
+                soil: '',
+                container : '',
+                ideal_spacing: '',
+                no_planted: '',
+                germination_time: '',
+                harvest_time: '',
+                comment: ''
             },
-        submitFertilizer() {
-            this.b_submitFertilizerForm = true
-            this.b_fertilizeruser = true
-            this.b_fertilizerPlants = true,
-            this.b_fertilizerData = true
-            this.b_fertilizerDate = true
+            plant_form : {
+                plant: '',
+                location: '',
+                description: ''
+            },
 
-            if (this.fertilizer_form.user === '') {
-                this.b_fertilizeruser = false
-                this.b_submitFertilizerForm = false
-            }
-            if (this.fertilizer_form.plants.length === 0) {
-                this.b_fertilizerPlants = false
-                this.b_submitFertilizerForm = false
-            }
-            if (this.fertilizer_form.fertilizer === '' && this.fertilizer_form.comments === ''){
-                this.b_fertilizerData = false
-                this.b_submitFertilizerForm = false
-            }
-            if (this.fertilizer_form.date.length === 0){
-                this.b_fertilizerDate = false
-                this.b_submitFertilizerForm = false
-            }
-            if (this.b_submitFertilizerForm){
-                console.log('Selected Objects:', this.fertilizer_form)
 
-                axios
-                .post('/garden/fertilizers/post/', this.fertilizer_form)
-                .then( response => {
-                    console.log('info', response.data)
+            fertilizer_form : {
+                user : '',
+                fertilizer : '',
+                date: ref([]),
+                plants : [],
+                comments : ''
+            },
+        };
+    },
+    mounted() {
+        this.fetchPlants();
+    },
+    methods: {
+        fetchPlants() {
+        this.loading = true;
+        axios.get('/garden/')
+            .then(response => {
+            this.loading = false;
+            this.plants = response.data;
+            })
+            .catch(error => {
+            this.loading = false;
+            this.error = error.message;
+            });
+        },
+        parseDescription(desc) {
+        const plantNotes = JSON.parse(desc)
+        return plantNotes
+        // this.desc_notes = plantNotes
+        },
+        submitPlant() {
+                this.b_submitPlantForm = true
+                this.b_plantLocation = true
+                this.b_plantName = true
+                this.errors = []
+                this.plant_form.description = JSON.stringify(this.plant_notes)
+                if (this.plant_form.plant === ''){
+                    this.b_plantName = false
+                    this.b_submitPlantForm = false
                 }
-                )
+                if (this.plant_form.location === ''){
+                    this.b_plantLocation = false
+                    this.b_submitPlantForm = false
+                }
+                if (this.b_submitPlantForm) {
+                    console.log('info', this.plant_form)
+
+                    axios
+                    .post('/garden/plants/post/', this.plant_form)
+                    .then( response => {
+                        console.log('info', response.data)
+                    }
+                    )
+
+                    this.resetForm()
+                }
+                
+                },
+            submitFertilizer() {
+                this.b_submitFertilizerForm = true
+                this.b_fertilizeruser = true
+                this.b_fertilizerPlants = true,
+                this.b_fertilizerData = true
+                this.b_fertilizerDate = true
+
+                if (this.fertilizer_form.user === '') {
+                    this.b_fertilizeruser = false
+                    this.b_submitFertilizerForm = false
+                }
+                if (this.fertilizer_form.plants.length === 0) {
+                    this.b_fertilizerPlants = false
+                    this.b_submitFertilizerForm = false
+                }
+                if (this.fertilizer_form.fertilizer === '' && this.fertilizer_form.comments === ''){
+                    this.b_fertilizerData = false
+                    this.b_submitFertilizerForm = false
+                }
+                if (this.fertilizer_form.date.length === 0){
+                    this.b_fertilizerDate = false
+                    this.b_submitFertilizerForm = false
+                }
+                if (this.b_submitFertilizerForm){
+                    console.log('Selected Objects:', this.fertilizer_form)
+
+                    axios
+                    .post('/garden/fertilizers/post/', this.fertilizer_form)
+                    .then( response => {
+                        console.log('info', response.data)
+                    }
+                    )
+
+                    this.resetForm()
+                }
+                
+            },
+
+            showPlantForm() {
+                this.b_showPlantForm = true
+            },
+            showFertilizerForm() {
+                this.b_showFertilizerForm = true
+            },
+            closeForm() {
+                this.b_showPlantForm = false
+                this.b_showFertilizerForm = false
 
                 this.resetForm()
+            },
+            resetForm() {
+                this.b_plantName = true
+                this.b_plantLocation = true
+
+                this.b_submitPlantForm = true
+
+                this.b_showPlantForm = false
+
+                this.b_fertilizeruser = true
+                this.b_fertilizerDate = true
+                this.b_fertilizerPlants = true
+                this.b_fertilizerData = true
+
+                this.b_submitFertilizerForm = true
+
+                this.b_showFertilizerForm = false
+                
+                this.plant_notes.sow_months = ref([])
+                this.plant_notes.planting_method = ''
+                this.plant_notes.date_planted = ref([])
+                this.plant_notes.soil = ''
+                this.plant_notes.container = ''
+                this.plant_notes.ideal_spacing = ''
+                this.plant_notes.no_planted = ''
+                this.plant_notes.germination_time = ''
+                this.plant_notes.harvest_time = ''
+                this.plant_notes.comment = ''
+
+                this.plant_form.plant = ''
+                this.plant_form.location = ''
+                this.plant_form.description = ''
+
+
+                this.fertilizer_form.user = ''
+                this.fertilizer_form.fertilizer = ''
+                this.fertilizer_form.date = ref([])
+                this.fertilizer_form.plants = []
+                this.fertilizer_form.comments = ''
             }
-            
-        },
-
-        showPlantForm() {
-            this.b_showPlantForm = true
-        },
-        showFertilizerForm() {
-            this.b_showFertilizerForm = true
-        },
-        closeForm() {
-            this.b_showPlantForm = false
-            this.b_showFertilizerForm = false
-
-            this.resetForm()
-        },
-
-        resetForm() {
-            this.b_plantName = true
-            this.b_plantLocation = true
-
-            this.b_submitPlantForm = true
-
-            this.b_showPlantForm = false
-
-            this.b_fertilizeruser = true
-            this.b_fertilizerDate = true
-            this.b_fertilizerPlants = true
-            this.b_fertilizerData = true
-
-            this.b_submitFertilizerForm = true
-
-            this.b_showFertilizerForm = false
-            
-            this.plant_notes.sow_months = ref([])
-            this.plant_notes.planting_method = ''
-            this.plant_notes.date_planted = ref([])
-            this.plant_notes.soil = ''
-            this.plant_notes.container = ''
-            this.plant_notes.ideal_spacing = ''
-            this.plant_notes.no_planted = ''
-            this.plant_notes.germination_time = ''
-            this.plant_notes.harvest_time = ''
-            this.plant_notes.comment = ''
-
-            this.plant_form.plant = ''
-            this.plant_form.location = ''
-            this.plant_form.description = ''
-
-
-            this.fertilizer_form.user = ''
-            this.fertilizer_form.fertilizer = ''
-            this.fertilizer_form.date = ref([])
-            this.fertilizer_form.plants = []
-            this.fertilizer_form.comments = ''
-        }
-}
+    }
 }
 </script>
   

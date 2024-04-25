@@ -4,10 +4,10 @@ export const months = [
   ];
 
   export const locations = [
-    { value: 'in-lvrm', name: 'INDOOR:LIVING_ROOM' },
-    { value: 'in-bdrm', name: 'INDOOR:BEDROOM' },
-    { value: 'in-bath', name: 'INDOOR:BATHROOM' },
-    { value: 'hyd', name: 'HYDROPONICS' },
-    { value: 'out-lvrm', name: 'OUTDOOR:PATIO_LVRM' },
-    { value: 'out-bdrm', name: 'OUTDOOR:PATIO_BDRM' },
+    { value: 'INDOOR:LIVING_ROOM', name: 'INDOOR:LIVING_ROOM' },
+    { value: 'INDOOR:BEDROOM', name: 'INDOOR:BEDROOM' },
+    { value: 'INDOOR:BATHROOM', name: 'INDOOR:BATHROOM' },
+    { value: 'HYDROPONICS', name: 'HYDROPONICS' },
+    { value: 'OUTDOOR:PATIO_LVRM', name: 'OUTDOOR:PATIO_LVRM' },
+    { value: 'OUTDOOR:PATIO_BDRM', name: 'OUTDOOR:PATIO_BDRM' },
   ];
