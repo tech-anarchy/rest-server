@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 # Create your models here.
 class EndPoint(models.Model):
@@ -19,7 +20,7 @@ class Plant(models.Model):
     def __str__(self):
         return self.name + ":" + str(self.uuid)
     
-class Data(models.Model):
+class PlantAutoData(models.Model):
     endpoint = models.ForeignKey(EndPoint, to_field="uuid", db_column="endpoint", on_delete=models.CASCADE, null=True, blank=True)
     plant = models.ForeignKey(Plant, to_field="uuid", db_column="plant", on_delete=models.CASCADE, null=True, blank=True)
     temparature = models.FloatField(null=True, blank=True, default=None)
@@ -27,3 +28,15 @@ class Data(models.Model):
     ph = models.FloatField(null=True, blank=True, default=None)
     moisture = models.FloatField(null=True, blank=True, default=None)
     time = models.TimeField(auto_now=True)
+
+class PlantUsrData(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    plant = models.ForeignKey(Plant, to_field="uuid", db_column="plant", on_delete=models.CASCADE)
+
+    fertilizer = models.CharField(max_length = 140, null=True, blank=True, default=None)
+    notes = models.TextField(null=True, blank=True, default=None)
+
+    date = models.DateField()
+
+    def __str__(self):
+        return self.user.username + " : " +  self.plant.name

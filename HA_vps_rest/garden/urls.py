@@ -6,4 +6,7 @@ urlpatterns = [
 path('', views.getData),
 path('connect/', views.checkConnection),
 path('post/', views.postData),
+path('fertilizers/post/', views.postFertilizer),
+path('plants/post/', views.addPlant),
+path('plant=<str:uuid>', views.getPlant),
 ]
