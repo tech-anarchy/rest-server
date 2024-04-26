@@ -3,7 +3,7 @@ export const months = [
     "July", "August", "September", "October", "November", "December"
   ];
 
-  export const locations = [
+export const locations = [
     { value: 'INDOOR:LIVING_ROOM', name: 'INDOOR:LIVING_ROOM' },
     { value: 'INDOOR:BEDROOM', name: 'INDOOR:BEDROOM' },
     { value: 'INDOOR:BATHROOM', name: 'INDOOR:BATHROOM' },
@@ -11,3 +11,12 @@ export const months = [
     { value: 'OUTDOOR:PATIO_LVRM', name: 'OUTDOOR:PATIO_LVRM' },
     { value: 'OUTDOOR:PATIO_BDRM', name: 'OUTDOOR:PATIO_BDRM' },
   ];
+
+export const plantTypes = [
+  { value: 'HERB', name: 'HERB' },
+  { value: 'VEGETABLE', name: 'VEGETABLE' },
+  { value: 'FRUIT', name: 'FRUIT' },
+  { value: 'FLOWER', name: 'FLOWER' },
+  { value: 'ORNAMENTAL', name: 'ORNAMENTAL' },
+  { value: 'BONSAI', name: 'BONSAI' },
+]

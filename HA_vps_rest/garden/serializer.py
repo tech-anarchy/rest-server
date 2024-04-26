@@ -9,7 +9,7 @@ class EndPointSerializer(serializers.ModelSerializer):
 class PlantSerializer(serializers.ModelSerializer):
     class Meta:
         model = Plant
-        fields = ('uuid', 'name', 'location' ,'description')
+        fields = ('uuid', 'name', 'location', 'type', 'description')
 
 class PlantAutoDataSerializer(serializers.ModelSerializer):
     class Meta:

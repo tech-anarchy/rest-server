@@ -15,6 +15,7 @@ class Plant(models.Model):
     uuid = models.UUIDField(unique = True)
     name = models.CharField(max_length = 140)
     location = models.CharField(max_length = 140, default="NULL")
+    type = models.CharField(max_length = 140, default="NULL")
     description = models.TextField()
 
     def __str__(self):

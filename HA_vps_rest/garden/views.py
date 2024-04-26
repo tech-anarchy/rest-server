@@ -152,6 +152,13 @@ def addPlant(request):
         msg.append("No Fertilizer provided")
 
     try:
+        plantType = request.data['type']
+        if plantType is None or plantType == "":
+            msg.append("Invalid Type")
+    except:
+        msg.append("No Type provided")
+
+    try:
         location = request.data['location']
         if location is None or location == "":
             msg.append("Invalid Location")
@@ -171,6 +178,7 @@ def addPlant(request):
             'uuid' : uuid.uuid4(),
             'name' : plant,
             'location' : location,
+            'type' : plantType,
             'description' : description
         }
         serializer = PlantSerializer(data = data)

@@ -8,6 +8,7 @@
                 {{ plant.name }}
                 </h5>
                 <fwb-badge> {{ plant.location }} </fwb-badge>
+                <fwb-badge> {{ plant.type }} </fwb-badge>
 
                 <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2">
                     <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
