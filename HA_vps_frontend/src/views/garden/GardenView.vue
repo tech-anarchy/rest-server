@@ -40,6 +40,21 @@
                                   validation-status="error"
                               />
                           </div>
+                          <div v-if="b_plantType">
+                              <fwb-select
+                                  v-model="plant_form.type"
+                                  :options="plantTypes"
+                                  label="Select type"
+                              />
+                          </div>
+                          <div v-else>
+                              <fwb-select
+                                  v-model="plant_form.type"
+                                  :options="plantTypes"
+                                  label="Select type"
+                                  validation-status="error"
+                              />
+                          </div>
                       </div>
 
                       <div>
@@ -266,121 +281,720 @@
     <div v-if="loading"><fwb-spinner /></div>
     <div v-else>
       <div v-if="error" class="error">Error: {{ error }}</div>
-      <div class="container mx-auto px-4 py-10" v-else>
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+        <div class="container mx-auto px-4 py-10" v-else>
+            <fwb-accordion :open-first-item="false">
+                <!-- <div v-for="arr in [herb_plants, vegetable_plants, fruit_plants, flower_plants, bonsai_plants, ornamental_plants]"> -->
+                    <fwb-accordion-panel>
+                        <fwb-accordion-header>HERB PLANTS</fwb-accordion-header>
+                            <fwb-accordion-content>
+                                <div class="my-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+                                    <div v-for="plant in herb_plants" :key="plant.id">
+                                        <RouterLink :to="{name: 'plant', params: {id: plant.uuid}}">
+                                            <fwb-card href="#">
+                                                    
+                                                <div class="p-5 w-35">        
+                                                    <img class="scale-50" src="../../assets/icons/plant.png" alt="">     
+                                                    <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                                                    {{ plant.name }}
+                                                    </h5>
+                                                    <fwb-badge> {{ plant.location }} </fwb-badge>
+                                                    <fwb-badge> {{ plant.type }} </fwb-badge>
+                                                    <div class="my-3" v-for="temp in [parseDescription(plant.description)]">
 
-          <div v-for="plant in plants" :key="plant.id">
-            
-            <RouterLink :to="{name: 'plant', params: {id: plant.uuid}}">
-              <fwb-card href="#">
-                    
-                <div class="p-5 w-35">        
-                    <img class="scale-50" src="../../assets/icons/plant.png" alt="">     
-                    <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-                    {{ plant.name }}
-                    </h5>
-                    <fwb-badge> {{ plant.location }} </fwb-badge>
-                    <div class="my-3" v-for="temp in [parseDescription(plant.description)]">
+                                                    <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2">
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                            Sow months:
+                                                        </div>
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                        {{ temp.sow_months }}
+                                                        </div>
+                                                    </div>
 
-                      <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2">
-                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                            Sow months:
-                        </div>
-                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                          {{ temp.sow_months }}
-                        </div>
-                      </div>
+                                                    <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2">
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                            Planting method:
+                                                        </div>
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                        {{ temp.planting_method }}
+                                                        </div>
+                                                    </div>
 
-                      <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2">
-                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                            Planting method:
-                        </div>
-                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                          {{ temp.planting_method }}
-                        </div>
-                      </div>
+                                                    <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2">
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                            Date planted:
+                                                        </div>
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                        {{ temp.date_planted[0] }}
+                                                        </div>
+                                                    </div>
 
-                      <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2">
-                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                            Date planted:
-                        </div>
-                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                          {{ temp.date_planted[0] }}
-                        </div>
-                      </div>
+                                                    <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2">
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                            Soil mix:
+                                                        </div>
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                        {{ temp.soil }}
+                                                        </div>
+                                                    </div>
 
-                      <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2">
-                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                            Soil mix:
-                        </div>
-                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                          {{ temp.soil }}
-                        </div>
-                      </div>
+                                                    <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2">
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                            Container:
+                                                        </div>
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                        {{ temp.container }}
+                                                        </div>
+                                                    </div>
 
-                      <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2">
-                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                            Container:
-                        </div>
-                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                          {{ temp.container }}
-                        </div>
-                      </div>
+                                                    <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2">
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                            Ideal spacing:
+                                                        </div>
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                        {{ temp.ideal_spacing }}
+                                                        </div>
+                                                    </div>
 
-                      <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2">
-                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                            Ideal spacing:
-                        </div>
-                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                          {{ temp.ideal_spacing }}
-                        </div>
-                      </div>
+                                                    <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2">
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                            # planted:
+                                                        </div>
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                        {{ temp.no_planted }}
+                                                        </div>
+                                                    </div>
 
-                      <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2">
-                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                            # planted:
-                        </div>
-                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                          {{ temp.no_planted }}
-                        </div>
-                      </div>
+                                                    <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2">
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                            Germination time:
+                                                        </div>
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                        {{ temp.germination_time }}
+                                                        </div>
+                                                    </div>
 
-                      <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2">
-                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                            Germination time:
-                        </div>
-                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                          {{ temp.germination_time }}
-                        </div>
-                      </div>
+                                                    <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2">
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                            Harvest time:
+                                                        </div>
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                        {{ temp.harvest_time }}
+                                                        </div>
+                                                    </div>
 
-                      <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2">
-                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                            Harvest time:
-                        </div>
-                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                          {{ temp.harvest_time }}
-                        </div>
-                      </div>
+                                                    <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2">
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                            Comment:
+                                                        </div>
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                        {{ temp.comment }}
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    </div>
+                                                </div>
 
-                      <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2">
-                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                            Comment:
-                        </div>
-                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                          {{ temp.comment }}
-                        </div>
-                      </div>
-                      
-                    </div>
-                </div>
+                                            </fwb-card>
+                                        </RouterLink>
+                                    </div>
 
-              </fwb-card>
-            </RouterLink>
+                                </div>
+                
+                            </fwb-accordion-content>
+                    </fwb-accordion-panel>
+                    <fwb-accordion-panel>
+                        <fwb-accordion-header>VEGERATBLE PLANTS</fwb-accordion-header>
+                            <fwb-accordion-content>
+                                <div class="my-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+                                    <div v-for="plant in vegetable_plants" :key="plant.id">
+                                        <RouterLink :to="{name: 'plant', params: {id: plant.uuid}}">
+                                            <fwb-card href="#">
+                                                    
+                                                <div class="p-5 w-35">        
+                                                    <img class="scale-50" src="../../assets/icons/plant.png" alt="">     
+                                                    <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                                                    {{ plant.name }}
+                                                    </h5>
+                                                    <fwb-badge> {{ plant.location }} </fwb-badge>
+                                                    <fwb-badge> {{ plant.type }} </fwb-badge>
+                                                    <div class="my-3" v-for="temp in [parseDescription(plant.description)]">
 
-          </div>
+                                                    <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2">
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                            Sow months:
+                                                        </div>
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                        {{ temp.sow_months }}
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2">
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                            Planting method:
+                                                        </div>
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                        {{ temp.planting_method }}
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2">
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                            Date planted:
+                                                        </div>
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                        {{ temp.date_planted[0] }}
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2">
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                            Soil mix:
+                                                        </div>
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                        {{ temp.soil }}
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2">
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                            Container:
+                                                        </div>
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                        {{ temp.container }}
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2">
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                            Ideal spacing:
+                                                        </div>
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                        {{ temp.ideal_spacing }}
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2">
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                            # planted:
+                                                        </div>
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                        {{ temp.no_planted }}
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2">
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                            Germination time:
+                                                        </div>
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                        {{ temp.germination_time }}
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2">
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                            Harvest time:
+                                                        </div>
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                        {{ temp.harvest_time }}
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2">
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                            Comment:
+                                                        </div>
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                        {{ temp.comment }}
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    </div>
+                                                </div>
+
+                                            </fwb-card>
+                                        </RouterLink>
+                                    </div>
+
+                                </div>
+                
+                            </fwb-accordion-content>
+                    </fwb-accordion-panel>
+                    <fwb-accordion-panel>
+                        <fwb-accordion-header>FRUIT PLANTS</fwb-accordion-header>
+                            <fwb-accordion-content>
+                                <div class="my-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+                                    <div v-for="plant in fruit_plants" :key="plant.id">
+                                        <RouterLink :to="{name: 'plant', params: {id: plant.uuid}}">
+                                            <fwb-card href="#">
+                                                    
+                                                <div class="p-5 w-35">        
+                                                    <img class="scale-50" src="../../assets/icons/plant.png" alt="">     
+                                                    <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                                                    {{ plant.name }}
+                                                    </h5>
+                                                    <fwb-badge> {{ plant.location }} </fwb-badge>
+                                                    <fwb-badge> {{ plant.type }} </fwb-badge>
+                                                    <div class="my-3" v-for="temp in [parseDescription(plant.description)]">
+
+                                                    <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2">
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                            Sow months:
+                                                        </div>
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                        {{ temp.sow_months }}
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2">
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                            Planting method:
+                                                        </div>
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                        {{ temp.planting_method }}
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2">
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                            Date planted:
+                                                        </div>
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                        {{ temp.date_planted[0] }}
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2">
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                            Soil mix:
+                                                        </div>
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                        {{ temp.soil }}
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2">
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                            Container:
+                                                        </div>
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                        {{ temp.container }}
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2">
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                            Ideal spacing:
+                                                        </div>
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                        {{ temp.ideal_spacing }}
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2">
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                            # planted:
+                                                        </div>
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                        {{ temp.no_planted }}
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2">
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                            Germination time:
+                                                        </div>
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                        {{ temp.germination_time }}
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2">
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                            Harvest time:
+                                                        </div>
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                        {{ temp.harvest_time }}
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2">
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                            Comment:
+                                                        </div>
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                        {{ temp.comment }}
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    </div>
+                                                </div>
+
+                                            </fwb-card>
+                                        </RouterLink>
+                                    </div>
+
+                                </div>
+                
+                            </fwb-accordion-content>
+                    </fwb-accordion-panel>
+                    <fwb-accordion-panel>
+                        <fwb-accordion-header>FLOWER PLANTS</fwb-accordion-header>
+                            <fwb-accordion-content>
+                                <div class="my-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+                                    <div v-for="plant in flower_plants" :key="plant.id">
+                                        <RouterLink :to="{name: 'plant', params: {id: plant.uuid}}">
+                                            <fwb-card href="#">
+                                                    
+                                                <div class="p-5 w-35">        
+                                                    <img class="scale-50" src="../../assets/icons/plant.png" alt="">     
+                                                    <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                                                    {{ plant.name }}
+                                                    </h5>
+                                                    <fwb-badge> {{ plant.location }} </fwb-badge>
+                                                    <fwb-badge> {{ plant.type }} </fwb-badge>
+                                                    <div class="my-3" v-for="temp in [parseDescription(plant.description)]">
+
+                                                    <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2">
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                            Sow months:
+                                                        </div>
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                        {{ temp.sow_months }}
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2">
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                            Planting method:
+                                                        </div>
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                        {{ temp.planting_method }}
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2">
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                            Date planted:
+                                                        </div>
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                        {{ temp.date_planted[0] }}
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2">
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                            Soil mix:
+                                                        </div>
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                        {{ temp.soil }}
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2">
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                            Container:
+                                                        </div>
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                        {{ temp.container }}
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2">
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                            Ideal spacing:
+                                                        </div>
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                        {{ temp.ideal_spacing }}
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2">
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                            # planted:
+                                                        </div>
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                        {{ temp.no_planted }}
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2">
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                            Germination time:
+                                                        </div>
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                        {{ temp.germination_time }}
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2">
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                            Harvest time:
+                                                        </div>
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                        {{ temp.harvest_time }}
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2">
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                            Comment:
+                                                        </div>
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                        {{ temp.comment }}
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    </div>
+                                                </div>
+
+                                            </fwb-card>
+                                        </RouterLink>
+                                    </div>
+
+                                </div>
+                
+                            </fwb-accordion-content>
+                    </fwb-accordion-panel>
+                    <fwb-accordion-panel>
+                        <fwb-accordion-header>BONSAI PLANTS</fwb-accordion-header>
+                            <fwb-accordion-content>
+                                <div class="my-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+                                    <div v-for="plant in bonsai_plants" :key="plant.id">
+                                        <RouterLink :to="{name: 'plant', params: {id: plant.uuid}}">
+                                            <fwb-card href="#">
+                                                    
+                                                <div class="p-5 w-35">        
+                                                    <img class="scale-50" src="../../assets/icons/plant.png" alt="">     
+                                                    <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                                                    {{ plant.name }}
+                                                    </h5>
+                                                    <fwb-badge> {{ plant.location }} </fwb-badge>
+                                                    <fwb-badge> {{ plant.type }} </fwb-badge>
+                                                    <div class="my-3" v-for="temp in [parseDescription(plant.description)]">
+
+                                                    <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2">
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                            Sow months:
+                                                        </div>
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                        {{ temp.sow_months }}
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2">
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                            Planting method:
+                                                        </div>
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                        {{ temp.planting_method }}
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2">
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                            Date planted:
+                                                        </div>
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                        {{ temp.date_planted[0] }}
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2">
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                            Soil mix:
+                                                        </div>
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                        {{ temp.soil }}
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2">
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                            Container:
+                                                        </div>
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                        {{ temp.container }}
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2">
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                            Ideal spacing:
+                                                        </div>
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                        {{ temp.ideal_spacing }}
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2">
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                            # planted:
+                                                        </div>
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                        {{ temp.no_planted }}
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2">
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                            Germination time:
+                                                        </div>
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                        {{ temp.germination_time }}
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2">
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                            Harvest time:
+                                                        </div>
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                        {{ temp.harvest_time }}
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2">
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                            Comment:
+                                                        </div>
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                        {{ temp.comment }}
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    </div>
+                                                </div>
+
+                                            </fwb-card>
+                                        </RouterLink>
+                                    </div>
+
+                                </div>
+                
+                            </fwb-accordion-content>
+                    </fwb-accordion-panel>
+                    <fwb-accordion-panel>
+                        <fwb-accordion-header>ORNAMENTAL PLANTS</fwb-accordion-header>
+                            <fwb-accordion-content>
+                                <div class="my-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+                                    <div v-for="plant in ornamental_plants" :key="plant.id">
+                                        <RouterLink :to="{name: 'plant', params: {id: plant.uuid}}">
+                                            <fwb-card href="#">
+                                                    
+                                                <div class="p-5 w-35">        
+                                                    <img class="scale-50" src="../../assets/icons/plant.png" alt="">     
+                                                    <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                                                    {{ plant.name }}
+                                                    </h5>
+                                                    <fwb-badge> {{ plant.location }} </fwb-badge>
+                                                    <fwb-badge> {{ plant.type }} </fwb-badge>
+                                                    <div class="my-3" v-for="temp in [parseDescription(plant.description)]">
+
+                                                    <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2">
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                            Sow months:
+                                                        </div>
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                        {{ temp.sow_months }}
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2">
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                            Planting method:
+                                                        </div>
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                        {{ temp.planting_method }}
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2">
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                            Date planted:
+                                                        </div>
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                        {{ temp.date_planted[0] }}
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2">
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                            Soil mix:
+                                                        </div>
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                        {{ temp.soil }}
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2">
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                            Container:
+                                                        </div>
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                        {{ temp.container }}
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2">
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                            Ideal spacing:
+                                                        </div>
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                        {{ temp.ideal_spacing }}
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2">
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                            # planted:
+                                                        </div>
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                        {{ temp.no_planted }}
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2">
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                            Germination time:
+                                                        </div>
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                        {{ temp.germination_time }}
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2">
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                            Harvest time:
+                                                        </div>
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                        {{ temp.harvest_time }}
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2">
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                            Comment:
+                                                        </div>
+                                                        <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                        {{ temp.comment }}
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    </div>
+                                                </div>
+
+                                            </fwb-card>
+                                        </RouterLink>
+                                    </div>
+
+                                </div>
+                
+                            </fwb-accordion-content>
+                    </fwb-accordion-panel>
+                <!-- </div> -->
+            </fwb-accordion>
         </div>
-      </div>
     </div>
   </div>
 </template>
@@ -396,7 +1010,11 @@
      FwbInput,
      FwbTextarea,
      FwbButton,
-     FwbSelect
+     FwbSelect,
+     FwbAccordion,
+    FwbAccordionContent,
+    FwbAccordionHeader,
+    FwbAccordionPanel,
   } from 'flowbite-vue'
 
   import { ref } from "vue";
@@ -411,7 +1029,7 @@
 
 <script>
     import axios from 'axios'
-    import { months, locations } from '../../js/constants.js'
+    import { months, locations, plantTypes } from '../../js/constants.js'
 
     export default {
     data() {
@@ -420,11 +1038,18 @@
             loading: false,
             error: null,
             plants: [],
+            herb_plants: [],
+            flower_plants: [],
+            vegetable_plants: [],
+            bonsai_plants: [],
+            fruit_plants: [],
+            ornamental_plants: [],
 
             desc_notes: {},
 
             b_plantName: true,
             b_plantLocation: true,
+            b_plantType: true,
 
             b_submitPlantForm: true,
 
@@ -454,6 +1079,7 @@
             plant_form : {
                 plant: '',
                 location: '',
+                type: '',
                 description: ''
             },
 
@@ -469,6 +1095,7 @@
     },
     mounted() {
         this.fetchPlants();
+        
     },
     methods: {
         fetchPlants() {
@@ -477,6 +1104,7 @@
             .then(response => {
             this.loading = false;
             this.plants = response.data;
+            this.sortPlants()
             })
             .catch(error => {
             this.loading = false;
@@ -488,14 +1116,42 @@
         return plantNotes
         // this.desc_notes = plantNotes
         },
+        sortPlants() {
+            for (var plant of this.plants){
+                if (plant.type == 'HERB'){
+                    this.herb_plants.push(plant)
+                }
+                if (plant.type == 'VEGETABLE'){
+                    this.vegetable_plants.push(plant)
+                }
+                if (plant.type == 'FRUIT'){
+                    this.fruit_plants.push(plant)
+                }
+                if (plant.type == 'FLOWER'){
+                    this.flower_plants.push(plant)
+                }
+                if (plant.type == 'BONSAI'){
+                    this.bonsai_plants.push(plant)
+                }
+                if (plant.type == 'ORNAMENTAL'){
+                    this.ornamental_plants.push(plant)
+                }
+                
+            }
+        },
         submitPlant() {
                 this.b_submitPlantForm = true
                 this.b_plantLocation = true
                 this.b_plantName = true
+                this.b_plantType = true
                 this.errors = []
                 this.plant_form.description = JSON.stringify(this.plant_notes)
                 if (this.plant_form.plant === ''){
                     this.b_plantName = false
+                    this.b_submitPlantForm = false
+                }
+                if (this.plant_form.type === ''){
+                    this.b_plantType = false
                     this.b_submitPlantForm = false
                 }
                 if (this.plant_form.location === ''){
@@ -569,6 +1225,7 @@
             resetForm() {
                 this.b_plantName = true
                 this.b_plantLocation = true
+                this.b_plantType = true
 
                 this.b_submitPlantForm = true
 
